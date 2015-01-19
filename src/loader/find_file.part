@@ -1,0 +1,112 @@
+find_file_in_inode:
+mov dword ecx,[superblock_start+0x18]
+inc cl
+mov ch,0x0C
+add edi,0x28
+mov bx,((usable_start>>0x04)+0x40)
+mov es,bx
+mov bx,(usable_start&0x0F)
+find_file_in_inode_direct_loop:
+mov dword eax,[edi]
+shl eax,cl
+pusha
+mov ch,0x01
+shl ch,cl
+mov cl,ch
+call read_sectors_lba
+popa
+call find_file_in_directory_entries
+test eax,eax
+jnz return
+add edi,0x04
+dec ch
+jnz find_file_in_inode_direct_loop
+find_file_in_inode_indirect_loop:
+mov dword eax,[edi]
+shl eax,cl
+pusha
+mov ch,0x01
+shl ch,cl
+mov cl,ch
+call read_sectors_lba
+popa
+call find_file_in_indirect_directory_entries
+find_file_in_inode_indirect2_loop:
+find_file_in_inode_indirect3_loop:
+xor eax,eax
+ret
+
+find_file_in_directory_entries:
+;es:bx=directory entry table start
+xor eax,eax
+push eax
+mov ebp,esp
+pusha
+xor ecx,ecx
+mov cl,[superblock_start+0x18]
+inc cl
+mov edx,0x0200
+shl edx,cl
+mov edi,esi
+find_file_in_directory_entries_loop:
+mov byte cl,[es:(bx+0x06)]
+dec cl
+add bx,0x08
+add bx,cx
+add esi,ecx
+check_directory_entry_name:
+mov byte al,[es:bx]
+test al,al
+jz find_file_in_directory_entries_next_entry
+mov byte ah,[esi]
+test ah,ah
+jz find_file_in_directory_entries_next_entry
+cmp al,ah
+jnz find_file_in_directory_entries_next_entry
+dec bx
+dec esi
+loop check_directory_entry_name
+mov eax,[es:(bx-0x08)]
+mov dword [ebp],eax
+popa
+pop eax
+ret
+find_file_in_directory_entries_next_entry:
+sub bx,cx
+mov word cx,[es:(bx-0x04)]
+add bx,cx
+sub bx,0x08
+mov esi,edi
+sub edx,ecx
+jnz find_file_in_directory_entries_loop
+popa
+ret 0x04
+
+find_file_in_indirect_directory_entries:
+xor eax,eax
+push eax
+pusha
+xor ecx,ecx
+mov cl,[superblock_start+0x18]
+inc cl
+mov edx,0x80
+shl edx,cl
+find_file_in_indirect_directory_entries_loop:
+mov eax,[es:bx]
+pusha
+mov bx,((usable_start>>0x04)+0x80)
+mov es,bx
+mov bx,(usable_start&0x0F)
+pusha
+mov ch,0x01
+shl ch,cl
+mov cl,ch
+call read_sectors_lba
+popa
+call find_file_in_directory_entries
+popa
+add bx,0x04
+dec edx
+jnz find_file_in_indirect_directory_entries_loop
+popa
+ret 0x04
