@@ -28,3 +28,7 @@ root_bgd_start equ 0xE400
 root_bgd_end equ 0xE600
 
 usable_start equ 0xE600
+usable_end equ 0xF000
+
+start_file_start equ 0xF000
+start_file_end equ 0x10000

@@ -1,6 +1,5 @@
 find_file_in_inode:
-mov dword ecx,[superblock_start+0x18]
-inc cl
+call get_block2device_shift
 mov ch,0x0C
 add edi,0x28
 mov bx,((usable_start>>0x04)+0x40)
@@ -38,49 +37,44 @@ ret
 
 find_file_in_directory_entries:
 ;es:bx=directory entry table start
+;esi=file name start
 xor eax,eax
 push eax
 mov ebp,esp
 pusha
-xor ecx,ecx
-mov cl,[superblock_start+0x18]
-inc cl
-mov edx,0x0200
-shl edx,cl
-mov edi,esi
+call get_block_size
+mov edx,eax
 find_file_in_directory_entries_loop:
+xor ecx,ecx
 mov byte cl,[es:(bx+0x06)]
-dec cl
 add bx,0x08
 add bx,cx
-add esi,ecx
-check_directory_entry_name:
-mov byte al,[es:bx]
-test al,al
-jz find_file_in_directory_entries_next_entry
-mov byte ah,[esi]
-test ah,ah
-jz find_file_in_directory_entries_next_entry
-cmp al,ah
-jnz find_file_in_directory_entries_next_entry
+mov edi,esi
+add edi,ecx
+check_name:
 dec bx
-dec esi
-loop check_directory_entry_name
-mov eax,[es:(bx-0x08)]
+dec edi
+mov al,[es:bx]
+cmp al,[edi]
+jnz find_file_in_directory_entries_next_entry
+loop check_name
+return_inode:
+mov word eax,[es:(bx-0x08)]
 mov dword [ebp],eax
 popa
 pop eax
 ret
 find_file_in_directory_entries_next_entry:
+add cl,0x07
 sub bx,cx
-mov word cx,[es:(bx-0x04)]
-add bx,cx
-sub bx,0x08
-mov esi,edi
-sub edx,ecx
+xor eax,eax
+mov word ax,[es:(bx+0x04)]
+add bx,ax
+sub edx,eax
 jnz find_file_in_directory_entries_loop
 popa
-ret 0x04
+pop eax
+ret
 
 find_file_in_indirect_directory_entries:
 xor eax,eax

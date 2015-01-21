@@ -1,3 +1,4 @@
+; DONT WRITE TO SUPERBLOCK!!!
 [global loader]
 
 [section .text]
@@ -68,54 +69,56 @@ cmp ax,0x03
 jz error
 no_ext2_errors:
 
-calc_blockgroup_descriptor_device_block:
-mov dword ecx,[superblock_start+0x18]
-test cl,cl
-jnz calc_blockgroup_descriptor_device_block2
-inc cl
-
-calc_blockgroup_descriptor_device_block2:
+read_root_inode:
 mov eax,0x02
-shl eax,cl
-
-read_blockgroup_descriptor:
-mov cl,0x01
-call read_sectors_to_usable_lba
-
-calc_inode_table_device_block:
-mov dword ecx,[superblock_start+0x18]
-mov dword eax,[usable_start+0x08]
-inc cl
-shl eax,cl
-push eax
-
-calc_block_offset:
-call get_inode_size
-push eax
-mov dword ecx,[superblock_start+0x18]
-add cl,0x0A
-mov ebx,0x0400
-shl ebx,cl
-xor edx,edx
-div ebx
-
-calc_inode_table_device_block2:
-pop ecx
-shr ecx,0x09
-inc cl
-mov ebx,eax
-pop eax
-add eax,ebx
-push edx
-
-read_inode_table_block:
-call read_sectors_to_usable_lba
+call read_inode_to_usable
 
 find_start_file:
 mov esi,start_file_name
-pop edi
+mov edi,edx
 add edi,usable_start
 call find_file_in_inode
+test eax,eax
+jz error
+
+read_start_file_inode:
+call read_inode_to_usable
+
+read_start_file:
+mov bx,(start_file_start>>0x04)
+mov es,bx
+mov bx,(start_file_start&0x0F)
+mov eax,0x01
+call block2device
+mov cl,al
+read_start_file_loop:
+mov dword eax,[usable_start+edx+0x28]
+test eax,eax
+jz jump
+push cx
+call block2device
+pop cx
+pusha
+call read_sectors_lba
+popa
+push cx
+call get_block_size
+add bl,al
+and bl,0x0F
+shr eax,0x04
+mov cx,es
+add cx,ax
+mov es,cx
+pop cx
+add edx,0x04
+jmp read_start_file_loop
+; TODO: support files larger than 12 blocks
+
+jump:
+mov byte dl,[bootdrive]
+push end
+push start_file_start
+ret
 
 end:
 jmp halt
@@ -141,20 +144,13 @@ jmp $
 ;variables
 
 error_str: db "ERROR",0x00
-;start_file_name: db "start16.bin",0x00
-start_file_name: db "loader.bin",0x00
+start_file_name: db "start16.bin",0x00
+;start_file_name: db "loader.bin",0x00
+;start_file_name: db "disk.img",0x00
 
 ;constants
 
-%include "../memory/memconsts/memconsts.asm"
-
-;split
-
-jmp second_half
-times 0x1FE-($-$$) db 0
-db 0x55
-db 0xAA
-second_half:
+%include "../memconsts/memconsts.asm"
 
 ;functions:
 
@@ -162,104 +158,22 @@ return:
 ret
 
 popa_return:
+popa
 ret
 
-read_sectors_to_usable_lba:
-xor ch,ch
-push cx
-xor bh,bh
-mov byte bl,[bootsectors]
-push bx
-mov byte bl,[bootheads]
-push bx
-push eax
-call lbs2chs
-call chs2int13h
-pop ax
+%include "read_sectors.part"
 
-read_sectors_to_usable:
-mov bx,(usable_start>>0x04)
-mov es,bx
-mov bx,(usable_start&0x0F)
-jmp read_sectors
+%include "superblock.part"
 
-read_sectors_lba:
-push bx
-xor ch,ch
-push cx
-xor bh,bh
-mov byte bl,[bootsectors]
-push bx
-mov byte bl,[bootheads]
-push bx
-push eax
-call lbs2chs
-call chs2int13h
-pop ax
-pop bx
+;split
+%include "split.part"
+;part 2
 
-read_sectors:
-mov ah,0x02
-mov byte dl,[bootdrive]
-int 0x13
-jc error
-ret
+%include "blockgroups.part"
 
-get_inode_size:
-mov eax,0x80
-mov word cx,[superblock_start+0x4C]
-test cx,cx
-jz return
-mov word ax,[superblock_start+0x58]
-ret
-
-getchscount:
-mov ah,0x08
-int 0x13
-jc return
-mov bl,cl
-and bl,0x3F
-mov al,ch
-mov ah,cl
-shr ah,0x06
-inc ax
-inc dh
-ret
-
-lbs2chs:
-mov ebp,esp
-add ebp,0x02
-mov word cx,[ebp+0x06]
-mov word ax,[ebp+0x04]
-mul cl
-xor ecx,ecx
-mov cx,ax
-xor edx,edx
-mov dword eax,[ebp]
-div ecx
-push eax
-xor edx,edx
-mov dword eax,[ebp]
-xor ecx,ecx
-mov word cx,[ebp+0x06]
-div ecx
-inc edx
-push edx
-xor ecx,ecx
-mov word cx,[ebp+0x04]
-xor edx,edx
-div ecx
-pop eax
-pop ecx
-ret 0x08
-
-chs2int13h:
-mov dh,cl
-shr cx,0x02
-and cl,0xC0
-or cl,al
-mov ch,dh
-mov dh,dl
-ret
+%include "conversions.part"
 
 %include "find_file.part"
+
+;size check
+times 0x03FF-($-$$) db 0

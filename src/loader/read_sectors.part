@@ -1,0 +1,34 @@
+prepare_read_lba:
+xor ch,ch
+push cx
+xor ch,ch
+mov byte cl,[bootsectors]
+push cx
+mov byte cl,[bootheads]
+push cx
+push eax
+call lba2chs
+call chs2int13h
+pop ax
+ret
+
+read_sectors_to_usable_lba:
+call prepare_read_lba
+
+read_sectors_to_usable:
+mov bx,(usable_start>>0x04)
+mov es,bx
+mov bx,(usable_start&0x0F)
+jmp read_sectors
+
+read_sectors_lba:
+push bx
+call prepare_read_lba
+pop bx
+
+read_sectors:
+mov ah,0x02
+mov byte dl,[bootdrive]
+int 0x13
+jc error
+ret

@@ -1,0 +1,67 @@
+calc_inode_blockgroup:
+;eax=inode
+dec eax
+mov dword ecx,[superblock_start+0x28]
+xor edx,edx
+div ecx
+;eax=block group
+;edx=inode index in blockgroup
+ret
+
+calc_inode_table_block_offset:
+;edx=inode index in blockgroup
+call get_inode_size
+mul edx
+mov ebx,eax
+call get_block_size
+xchg eax,ebx
+xor edx,edx
+div ebx
+;eax=inode table block offset
+;edx=offset in block
+ret
+
+calc_blockgroup_descriptor_table_device_block:
+mov dword ecx,[superblock_start+0x18]
+mov eax,0x02
+shl eax,cl
+test cl,cl
+jnz return
+shl eax,0x01
+;eax=blockgroup descriptor table start device block
+ret
+
+read_inode_to_usable:
+call calc_inode_blockgroup
+push eax
+shr eax,0x04
+mov ebx,eax
+call calc_blockgroup_descriptor_table_device_block
+add ebx,eax
+mov eax,0x01
+call block2device
+mov ecx,eax
+mov eax,ebx
+push edx
+call read_sectors_to_usable_lba
+pop edx
+call calc_inode_table_block_offset
+pop ecx
+shl ecx,0x05
+mov ebx,eax
+call get_block_size
+dec eax
+and ecx,eax
+mov eax,ebx
+add dword eax,[usable_start+ecx+0x08]
+call block2device
+mov ebx,eax
+mov eax,0x01
+call block2device
+mov ecx,eax
+mov eax,ebx
+push edx
+call read_sectors_to_usable_lba
+pop edx
+;edx=offset from usable start
+ret

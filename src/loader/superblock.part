@@ -1,0 +1,24 @@
+get_block2device_shift:
+mov dword ecx,[superblock_start+0x18]
+inc ecx
+ret
+
+get_block_size:
+mov eax,0x0400
+mov dword ecx,[superblock_start+0x18]
+shl eax,cl
+ret
+
+get_inode_size:
+mov eax,0x80
+mov word cx,[superblock_start+0x4C]
+test cx,cx
+jz return
+mov word ax,[superblock_start+0x58]
+ret
+
+block2device:
+mov dword ecx,[superblock_start+0x18]
+inc cl
+shl eax,cl
+ret

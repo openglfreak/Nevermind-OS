@@ -1,0 +1,48 @@
+getchscount:
+mov ah,0x08
+int 0x13
+jc return
+mov bl,cl
+and bl,0x3F
+mov al,ch
+mov ah,cl
+shr ah,0x06
+inc ax
+inc dh
+ret
+
+lba2chs:
+mov ebp,esp
+add ebp,0x02
+mov word cx,[ebp+0x06]
+mov word ax,[ebp+0x04]
+mul cl
+xor ecx,ecx
+mov cx,ax
+xor edx,edx
+mov dword eax,[ebp]
+div ecx
+push eax
+xor edx,edx
+mov dword eax,[ebp]
+xor ecx,ecx
+mov word cx,[ebp+0x06]
+div ecx
+inc edx
+push edx
+xor ecx,ecx
+mov word cx,[ebp+0x04]
+xor edx,edx
+div ecx
+pop eax
+pop ecx
+ret 0x08
+
+chs2int13h:
+mov dh,cl
+shr cx,0x02
+and cl,0xC0
+or cl,al
+mov ch,dh
+mov dh,dl
+ret
