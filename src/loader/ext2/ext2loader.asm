@@ -3,7 +3,7 @@
 
 [section .text]
 [bits 16]
-loader:
+ext2loader:
 cli
 mov byte [bootdrive],dl
 
@@ -144,15 +144,14 @@ jmp $
 ;variables
 
 error_str: db "ERROR",0x00
-start_file_name: db "start16.bin",0x00
-;start_file_name: db "loader.bin",0x00
-;start_file_name: db "disk.img",0x00
+
+%include "../startfile.part"
 
 ;constants
 
-%include "../memconsts/memconsts.asm"
+%include "../../memconsts/memconsts.asm"
 
-;functions:
+;functions
 
 return:
 ret
@@ -161,19 +160,19 @@ popa_return:
 popa
 ret
 
-%include "read_sectors.part"
+%include "../read_sectors.part"
+
+%include "../conversions.part"
+
+;split
+%include "../split.part"
+;part 2
 
 %include "superblock.part"
 
-;split
-%include "split.part"
-;part 2
-
 %include "blockgroups.part"
-
-%include "conversions.part"
 
 %include "find_file.part"
 
 ;size check
-times 0x03FF-($-$$) db 0
+times 0x03FF-($-$$) db 0x00

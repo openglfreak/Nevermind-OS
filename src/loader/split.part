@@ -1,5 +1,5 @@
 jmp second_half
-times 0x01FE-($-$$) db 0
+times 0x01FE-($-$$) db 0x00
 db 0x55
 db 0xAA
 second_half:

@@ -1,18 +1,21 @@
 #ifndef MEMCONSTS
 #define MEMCONSTS
 
-#include "../tables/gdt.h"
-#include "../tables/idt.h"
-#include "../paging.h"
-#include "../memory_map.h"
+#include "../kernel/gdt.h"
+#include "../kernel/idt.h"
+#include "../kernel/paging.h"
+#include "../kernel/infoarea.h"
+#include "../kernel/memory_map.h"
+#include "../kernel/drivers/fs/ext/ext2/superblock.h"
+#include "../kernel/drivers/fs/ext/ext2/bgdt.h"
 
+#define stack_start 0x7B00
+#define stack_end 0x7BF0
+
+#define bootcylinders ((unsigned short*)0x7BFB)
+#define bootheads ((unsigned char*)0x7BFD)
+#define bootsectors ((unsigned char*)0x7BFE)
 #define bootdrive ((unsigned char*)0x7BFF)
-
-#define root_bgd_start 0x7E00
-#define root_bgd_end 0x7E20
-
-#define stack_start ((unsigned short*)0x7E20)
-#define stack_end ((unsigned short*)0x8000)
 
 #define infoarea_start ((INFOAREA*)0x8000)
 #define infoarea_end ((INFOAREA*)0x8200)
@@ -29,12 +32,19 @@
 #define ptable0_end ((PAGE_TABLE_ENTRY*)0xD000)
 
 #define memmap_start ((MEMORY_MAP*)0xD000)
-#define memmap_end ((MEMORY_MAP_ENTRY*)0xF000)
+#define memmap_end ((MEMORY_MAP_ENTRY*)0xE000)
 
 #define superblock_start ((SUPERBLOCK*)0xE000)
 #define superblock_end ((SUPERBLOCK*)0xE400)
 
-#define usable_start 0xE400
+#define root_bgd_start ((BLOCKGROUP_DESCRIPTOR*)0xE400)
+#define root_bgd_end ((BLOCKGROUP_DESCRIPTOR*)0xE600)
+
+#define usable_start 0xE600
+#define usable_end 0xF000
+
+#define start_file_start 0xF000
+#define start_file_end 0x10000
 
 #endif // MEMCONSTS
 

@@ -1,10 +1,10 @@
+stack_start equ 0x7B00
+stack_end equ 0x7BF0
+
 bootcylinders equ 0x7BFB
 bootheads equ 0x7BFD
 bootsectors equ 0x7BFE
 bootdrive equ 0x7BFF
-
-stack_start equ 0x7B00
-stack_end equ 0x7BF0
 
 infoarea_start equ 0x8000
 infoarea_end equ 0x8200

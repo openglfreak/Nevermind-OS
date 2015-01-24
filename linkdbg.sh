@@ -1,22 +1,24 @@
-if [ -e obj ]
+if [ -e bin ]
 then
-    rm -R obj
+    rm -R bin
 fi
-mkdir obj
+mkdir bin
 
 d="$(pwd)"
 
-for f in $(find src -name compile.sh)
+for f in $(find src -name linkdbg.sh)
 do
     cd $d/${f%/*}
-    outp="$(sh compile.sh 2>&1)"
+    outp="$(sh linkdbg.sh 2>&1)"
     status=$?
     if [ $status -ne 0 ]
     then
         echo "$f: $outp"
         exit $status
     fi
-    cp -f -R obj/* $d/obj/
+    cp -f -R bin/* $d/bin/
 done
 
 cd $d
+
+sh getbases.sh
