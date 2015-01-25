@@ -1,5 +1,15 @@
 sh compiledbg.sh
+status=$?
+if [ $status -ne 0 ]
+then
+    exit $status
+fi
 sh linkdbg.sh
+status=$?
+if [ $status -ne 0 ]
+then
+    exit $status
+fi
 sh generatedisk.sh
 status=$?
 if [ $status -ne 0 ]

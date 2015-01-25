@@ -1,0 +1,1 @@
+directory :src:src/kernel:src/kernel/drivers:src/kernel/drivers/fs:src/kernel/drivers/fs/ext:src/kernel/memory:src/kernel/memory/memconsts:src/kernel/entry16:src/kernel/loader:src/kernel/loader/obj:src/kernel/loader/bin

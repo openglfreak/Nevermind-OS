@@ -1,5 +1,5 @@
-#ifndef IDT
-#define IDT
+#ifndef _IDT
+#define _IDT
 
 #define IDT_ATTR_PRESENT 0x80
 #define IDT_ATTR_MIN_DESCRIPTOR_PRIVILEGE(r) (((r)&0x03)<<0x05)
@@ -16,16 +16,20 @@
         (t)
 
 typedef struct __attribute__((packed)) {
-    unsigned short offset_low;
-    unsigned short selector;
-    unsigned char zero;
-    unsigned char type_and_attributes;
-    unsigned short offset_high;
+    uint16_t offset_low;
+    uint16_t selector;
+    uint8_t zero;
+    uint8_t type_and_attributes;
+    uint16_t offset_high;
 } IDT_GATE;
 
 typedef struct __attribute__((packed)) {
-    unsigned short limit;
-    unsigned int base;
+    IDT_GATE gates[256];
+} IDT;
+
+typedef struct __attribute__((packed)) {
+    uint16_t limit;
+    uint32_t base;
 } IDTR;
 
-#endif // IDT
+#endif // _IDT

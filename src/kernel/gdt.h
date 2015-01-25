@@ -32,17 +32,21 @@
         ((l)?GDT_FLAG_LONGMODE:0x00))
 
 typedef struct __attribute__((packed)) {
-    unsigned short limit_low;
-    unsigned short base_low;
-    unsigned char base_middle;
-    unsigned char access;
-    unsigned char limit_high_and_flags;
-    unsigned char base_high;
+    uint16_t limit_low;
+    uint16_t base_low;
+    uint8_t base_middle;
+    uint8_t access;
+    uint8_t limit_high_and_flags;
+    uint8_t base_high;
 } GDT_ENTRY;
 
 typedef struct __attribute__((packed)) {
-    unsigned short limit;
-    unsigned int base;
+    GDT_ENTRY entries[1024];
+} GDT;
+
+typedef struct __attribute__((packed)) {
+    uint16_t limit;
+    uint32_t base;
 } GDTR;
 
 #endif // GDT

@@ -11,10 +11,10 @@
 #define DIRECTORY_TYPE_SYMBOLIC_LINK 0x07
 
 typedef struct __attribute__ ((packed)) {
-    unsigned int inode;
-    unsigned short entry_size;
-    unsigned char name_len_low;
-    unsigned char name_len_high_or_type;
+    uint32_t inode;
+    uint16_t entry_size;
+    uint8_t name_len_low;
+    uint8_t name_len_high_or_type;
     char name[];
 } DIRECTORY_ENTRY;
 

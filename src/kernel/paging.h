@@ -56,8 +56,8 @@
 
 #define INVALIDATE_ALL_PAGES() __asm__ __volatile__ ("movl %%cr3,%%eax\nmovl %%eax,%%cr3\n" : : : "eax")
 
-typedef unsigned int PAGE_DIRECTORY_ENTRY;
-typedef unsigned int PAGE_TABLE_ENTRY;
+typedef uint32_t PAGE_DIRECTORY_ENTRY;
+typedef uint32_t PAGE_TABLE_ENTRY;
 
 typedef struct {
     PAGE_DIRECTORY_ENTRY entries[1024];

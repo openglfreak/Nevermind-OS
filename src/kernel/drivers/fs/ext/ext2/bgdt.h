@@ -1,18 +1,16 @@
 #ifndef BGDT
 #define BGDT
 
-typedef struct {
-    BLOCKGROUP_DESCRIPTOR descriptors[];
-} BLOCKGROUP_DESCRIPTOR_TABLE;
-
 typedef struct __attribute__ ((packed)) {
-    unsigned int block_usage_bitmap_block;
-    unsigned int inode_usage_bitmap_block;
-    unsigned int inode_table_start_block;
-    unsigned short unallocated_blocks_count;
-    unsigned short unallocated_inodes_count;
-    unsigned short directories_count;
-    unsigned char unused[13];
+    uint32_t block_usage_bitmap_block;
+    uint32_t inode_usage_bitmap_block;
+    uint32_t inode_table_start_block;
+    uint16_t unallocated_blocks_count;
+    uint16_t unallocated_inodes_count;
+    uint16_t directories_count;
+    uint8_t unused[13];
 } BLOCKGROUP_DESCRIPTOR;
+
+typedef BLOCKGROUP_DESCRIPTOR BLOCKGROUP_DESCRIPTOR_TABLE;
 
 #endif // BGDT

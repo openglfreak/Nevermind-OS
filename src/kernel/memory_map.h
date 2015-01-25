@@ -5,10 +5,10 @@
 #define MEMORY_MAP_ATTRIBUTES_BAD 0x05
 
 typedef struct __attribute__((packed)) {
-    unsigned long base;
-    unsigned long limit;
-    unsigned int attributes;
-    unsigned int infos;
+    uint64_t base;
+    uint64_t limit;
+    uint32_t attributes;
+    uint32_t infos;
 } MEMORY_MAP_ENTRY;
 
 typedef struct {

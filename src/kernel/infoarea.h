@@ -1,7 +1,7 @@
 typedef struct __attribute__ ((packed)) {
-    unsigned short COM1base;
-    unsigned short COM2base;
-    unsigned short COM3base;
-    unsigned short COM4base;
-    unsigned short EBDAstart;
+    uint32_t COM1base;
+    uint32_t COM2base;
+    uint32_t COM3base;
+    uint32_t COM4base;
+    uint32_t EBDAstart;
 } INFOAREA;

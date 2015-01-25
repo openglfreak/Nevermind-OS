@@ -35,38 +35,38 @@
 #define INODE_FLAGS_JOURNAL_FILE_DATA 0x040000
 
 typedef struct __attribute__ ((packed)) {
-    unsigned short type_and_permissions;
-    unsigned short user_id;
-    unsigned int size_low;
-    int last_access;
-    int creation;
-    int last_modify;
-    int deletion;
-    unsigned short group_id;
-    unsigned short hardlink_count;
-    unsigned int disk_sectors_occupied;
-    unsigned int flags;
-    unsigned int os_specific0;
-    unsigned int direct_block_pointers[12];
-    unsigned int indirect_block_pointer;
-    unsigned int doubly_indirect_block_pointer;
-    unsigned int triply_indirect_block_pointer;
-    unsigned int generation_number;
-    unsigned int file_acl;
-    unsigned int size_high_or_directory_acl;
-    unsigned int fragment;
-    unsigned int[3] os_specific1;
+    uint16_t type_and_permissions;
+    uint16_t user_id;
+    uint32_t size_low;
+    int32_t last_access;
+    int32_t creation;
+    int32_t last_modify;
+    int32_t deletion;
+    uint16_t group_id;
+    uint16_t hardlink_count;
+    uint32_t disk_sectors_occupied;
+    uint32_t flags;
+    uint32_t os_specific0;
+    uint32_t direct_block_pointers[12];
+    uint32_t indirect_block_pointer;
+    uint32_t doubly_indirect_block_pointer;
+    uint32_t triply_indirect_block_pointer;
+    uint32_t generation_number;
+    uint32_t file_acl;
+    uint32_t size_high_or_directory_acl;
+    uint32_t fragment;
+    uint32_t[3] os_specific1;
 } INODE;
 
 #define INODE_AUTHOR_NORMAL 0xFFFFFFFF
 
 typedef struct __attribute__ ((packed)) {
-    unsigned char fragment_number;
-    unsigned char fragment_size;
-    unsigned short type_and_permissions_high;
-    unsigned short user_id_high;
-    unsigned short group_id_high;
-    unsigned short author_id_high;
+    uint8_t fragment_number;
+    uint8_t fragment_size;
+    uint16_t type_and_permissions_high;
+    uint16_t user_id_high;
+    uint16_t group_id_high;
+    uint16_t author_id_high;
 } OS_SPECIFIC_VALUE1;
 
 #endif // INODE

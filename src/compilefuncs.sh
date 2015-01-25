@@ -15,7 +15,8 @@ compilegcc() {
     d="$(pwd)"
     cd "${1%/*}"
     f="${1##*/}"
-    gcc -c -m32 -O3 -s -o "$d/obj/${f%.*}.o" "$f" -nostdinc
+    gcc -c -m32 -O3 -s -o "$d/obj/${f%.*}.o" "$f" -nostdlib -fno-stack-protector
+    # -nostdinc
     status=$?
     if [ $status -ne 0 ]
     then
@@ -41,7 +42,8 @@ compilegccdbg() {
     d="$(pwd)"
     cd "${1%/*}"
     f="${1##*/}"
-    gcc -Wall -c -ggdb3 -gno-strict-dwarf -m32 -Og -o "$d/obj/${f%.*}.o" "$f" -nostdinc
+    gcc -Wall -c -ggdb3 -gno-strict-dwarf -m32 -Og -o "$d/obj/${f%.*}.o" "$f" -nostdlib -fno-stack-protector
+    # -nostdinc
     status=$?
     if [ $status -ne 0 ]
     then

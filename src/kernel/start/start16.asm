@@ -9,8 +9,12 @@ start16:
 mov ax,(stack_end>>0x04)
 mov ss,ax
 mov esp,(stack_end&0x0F)
-.enablea20:
-call enablea20
+.enable_a20:
+call enable_a20
+.get_biosinfos:
+call fill_info_area
+.get_memorymap:
+call detect_memory
 .copy_gdt:
 push dword (gdt_template_end-gdt_template)
 push dword gdt_start
@@ -58,6 +62,11 @@ mov fs,ax
 mov gs,ax
 mov ss,ax
 mov esp,stack_end
+.switch_pse:
+mov eax,cr4
+or al,0x10
+mov cr4,eax
+.jump:
 call start32
 jmp $
 
@@ -79,7 +88,7 @@ dd idt_start
 
 [bits 16]
 
-enablea20:
+enable_a20:
 .save_registers:
 push ax
 push bx
@@ -127,6 +136,95 @@ test al,0x01
 jz .wait2
 ret
 
+fill_info_area:
+.save_registers:
+push eax
+.copycombases:
+mov word ax,[0x0400]
+mov word [infoarea_start],ax
+mov word ax,[0x0402]
+mov word [infoarea_start+0x02],ax
+mov word ax,[0x0404]
+mov word [infoarea_start+0x04],ax
+mov word ax,[0x0406]
+mov word [infoarea_start+0x06],ax
+.fillebdastart:
+mov word ax,[0x040E]
+mov word [infoarea_start+0x08],ax
+.restore_registers:
+pop eax
+ret
+
+detect_memory:
+.save_registers:
+push eax
+push ebx
+push ecx
+push edx
+push si
+push di
+.clear_memmap:
+mov ecx,(memmap_end-memmap_start)
+.clear_memmap_loop:
+sub ecx,0x04
+mov dword [memmap_start+ecx],0x00
+jnz .clear_memmap_loop
+.init_loop:
+mov si,memmap_start
+xor di,di
+mov es,di
+mov di,infoarea_start+0x10
+mov edx,0x534D4150
+xor ebx,ebx
+.int_15_E820_loop:
+mov dword [infoarea_start+0x24],0x01
+mov eax,0xE820
+mov ecx,0x18
+int 0x15
+.check_validity:
+jc .restore_registers
+cmp eax,0x534D4150
+jne .restore_registers
+jcxz .testebx
+mov dword ecx,[infoarea_start+0x1C]
+test ecx,ecx
+jnz .check_acpi30attrs
+mov dword ecx,[infoarea_start+0x18]
+jecxz .testebx
+.check_acpi30attrs:
+mov dword ecx,[infoarea_start+0x24]
+and ecx,0x01
+jcxz .testebx
+
+.copy_entry_data:
+mov dword ecx,[infoarea_start+0x10]
+mov dword [si],ecx
+mov dword ecx,[infoarea_start+0x14]
+mov dword [si+0x04],ecx
+
+mov dword ecx,[infoarea_start+0x18]
+mov dword [si+0x08],ecx
+mov dword ecx,[infoarea_start+0x1C]
+mov dword [si+0x0C],ecx
+
+mov dword ecx,[infoarea_start+0x20]
+mov dword [si+0x10],ecx
+
+mov dword [si+0x14],0x00
+
+add si,0x18
+.testebx:
+test ebx,ebx
+jnz .int_15_E820_loop
+.restore_registers:
+pop eax
+pop ebx
+pop ecx
+pop edx
+pop si
+pop di
+ret
+
 zero_memory:
 push ebp
 mov ebp,esp
@@ -137,8 +235,7 @@ push edi
 mov dword edi,[ebp+0x06]
 mov dword ecx,[ebp+0x0A]
 .check_size:
-test ecx,ecx
-jz .restore_registers
+jecxz .restore_registers
 .zero_loop:
 mov byte [edi],0x00
 inc edi
@@ -162,8 +259,7 @@ mov dword esi,[ebp+0x06]
 mov dword edi,[ebp+0x0A]
 mov dword ecx,[ebp+0x0E]
 .check_size:
-test ecx,ecx
-jz .restore_registers
+jecxz .restore_registers
 .copy_loop:
 mov byte bl,[esi]
 mov byte [edi],bl
@@ -192,8 +288,7 @@ mov dword edi,[ebp+0x0A]
 mov dword ecx,[ebp+0x0E]
 mov dword edx,[ebp+0x12]
 .check_size_and_count:
-test ecx,ecx
-jz .restore_registers
+jecxz .restore_registers
 test edx,edx
 jz .restore_registers
 .replicate_loop:
