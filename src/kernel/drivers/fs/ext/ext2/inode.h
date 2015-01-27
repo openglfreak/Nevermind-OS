@@ -1,6 +1,8 @@
 #ifndef INODE
 #define INODE
 
+#include <stdint.h>
+
 #define INODE_TYPE_FIFO 0x1000
 #define INODE_TYPE_CHARACTER_DEVICE 0x2000
 #define INODE_TYPE_DIRECTORY 0x4000

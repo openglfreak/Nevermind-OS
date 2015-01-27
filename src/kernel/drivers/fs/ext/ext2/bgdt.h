@@ -1,6 +1,8 @@
 #ifndef BGDT
 #define BGDT
 
+#include <stdint.h>
+
 typedef struct __attribute__ ((packed)) {
     uint32_t block_usage_bitmap_block;
     uint32_t inode_usage_bitmap_block;

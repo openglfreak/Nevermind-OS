@@ -1,5 +1,17 @@
-; DONT WRITE TO SUPERBLOCK!!!
+; DO NOT WRITE TO SUPERBLOCK!!!
 [global loader]
+
+;constants
+
+%include "../../memconsts/memconsts.asm"
+
+%xdefine superblock_start usable_start
+%xdefine superblock_end (usable_start+0x0400)
+
+%xdefine root_bgd_start (usable_start+0x0400)
+%xdefine root_bgd_end (usable_start+0x0600)
+
+%xdefine usable_start (usable_start+0x0400)
 
 [section .text]
 [bits 16]
@@ -146,10 +158,6 @@ jmp $
 error_str: db "ERROR",0x00
 
 %include "../startfile.part"
-
-;constants
-
-%include "../../memconsts/memconsts.asm"
 
 ;functions
 

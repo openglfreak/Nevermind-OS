@@ -1,11 +1,12 @@
 ENTRY(start16)
 TARGET(elf32-i386)
-OUTPUT_FORMAT(binary)
+OUTPUT_FORMAT(elf32-i386)
 OUTPUT_ARCH(i386)
 
 INPUT(obj/start16.o)
 INPUT(obj/start32.o)
-OUTPUT(bin/kernel.bin)
+INPUT(obj/memory_manager.o)
+OUTPUT(obj/kernel.o)
 
 SECTIONS
 {
@@ -14,10 +15,10 @@ SECTIONS
     {
       obj/start16.o(.text)
       obj/start32.o(.text)
+      obj/memory_manager.o(.text)
     }
   .data . :
     {
-      obj/start16.o(.data)
-      obj/start32.o(.data)
+      *(.data)
     }
 }

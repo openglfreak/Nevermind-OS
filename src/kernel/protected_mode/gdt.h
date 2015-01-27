@@ -1,6 +1,8 @@
 #ifndef GDT
 #define GDT
 
+#include <stdint.h>
+
 #define GDT_ACC_PRESENT 0x80
 #define GDT_ACC_PRIVILEGE(r) (((r)&0x03)<<0x05)
 #define GDT_ACC_1 0x10
@@ -40,7 +42,7 @@ typedef struct __attribute__((packed)) {
     uint8_t base_high;
 } GDT_ENTRY;
 
-typedef struct __attribute__((packed)) {
+typedef struct {
     GDT_ENTRY entries[1024];
 } GDT;
 

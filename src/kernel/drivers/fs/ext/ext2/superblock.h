@@ -1,6 +1,8 @@
 #ifndef SUPERBLOCK
 #define SUPERBLOCK
 
+#include <stdint.h>
+
 #define EXT2_SIGNATURE 0xEF53
 
 #define FILE_SYSTEM_STATUS_CLEAN 0x01

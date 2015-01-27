@@ -1,36 +1,30 @@
-stack_start equ 0x7B00
-stack_end equ 0x7BF0
+%define stack_start 0x7B00
+%define stack_end 0x7BF0
 
-bootcylinders equ 0x7BFB
-bootheads equ 0x7BFD
-bootsectors equ 0x7BFE
-bootdrive equ 0x7BFF
+%define bootcylinders 0x7BFB
+%define bootheads 0x7BFD
+%define bootsectors 0x7BFE
+%define bootdrive 0x7BFF
 
-gdt_start equ 0x8000
-gdt_end equ 0xA000
+%define memmap_start 0x7E00
+%define memmap_end 0x8000
 
-idt_start equ 0xA000
-idt_end equ 0xA800
+%define gdt_start 0x8000
+%define gdt_end 0xA000
 
-infoarea_start equ 0xA800
-infoarea_end equ 0xB000
+%define idt_start 0xA000
+%define idt_end 0xA800
 
-pdir_start equ 0xB000
-pdir_end equ 0xC000
-ptable0_start equ 0xC000
-ptable0_end equ 0xD000
+%define infoarea_start 0xA800
+%define infoarea_end 0xB000
 
-memmap_start equ 0xD000
-memmap_end equ 0xE000
+%define usable_start 0xB000
+%define usable_end 0xD000
 
-superblock_start equ 0xE000
-superblock_end equ 0xE400
+%define pdir_start 0xD000
+%define pdir_end 0xE000
+%define ptable0_start 0xE000
+%define ptable0_end 0xF000
 
-root_bgd_start equ 0xE400
-root_bgd_end equ 0xE600
-
-usable_start equ 0xE600
-usable_end equ 0xF000
-
-start_file_start equ 0xF000
-start_file_end equ 0x10000
+%define start_file_start 0xF000
+%define start_file_end 0x10000

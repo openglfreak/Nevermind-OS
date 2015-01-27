@@ -2,6 +2,10 @@
 
 [extern start32]
 
+;constants
+
+%include "../../memconsts/memconsts.asm"
+
 [section .text]
 [bits 16]
 start16:
@@ -62,10 +66,6 @@ mov fs,ax
 mov gs,ax
 mov ss,ax
 mov esp,stack_end
-.switch_pse:
-mov eax,cr4
-or al,0x10
-mov cr4,eax
 .jump:
 call start32
 jmp $
@@ -79,10 +79,6 @@ dd gdt_start
 idtr:
 dw (idt_end-idt_start)
 dd idt_start
-
-;constants
-
-%include "../../memconsts/memconsts.asm"
 
 ;functions:
 
@@ -148,9 +144,19 @@ mov word ax,[0x0404]
 mov word [infoarea_start+0x04],ax
 mov word ax,[0x0406]
 mov word [infoarea_start+0x06],ax
-.fillebdastart:
+.getebdastart_bda:
+xor eax,eax
 mov word ax,[0x040E]
-mov word [infoarea_start+0x08],ax
+test ax,ax
+jz .getebdastart_int12h
+shl eax,0x04
+jmp .setebdastart
+.getebdastart_int12h:
+xor eax,eax
+int 0x12
+shl eax,0x0A
+.setebdastart:
+mov dword [infoarea_start+0x08],eax
 .restore_registers:
 pop eax
 ret

@@ -1,2 +1,3 @@
 boot:disk
 ata0-master: type=disk, path="disk.img", cylinders=128, heads=1, spt=18, status=inserted
+display_library: x, options="hideIPS"

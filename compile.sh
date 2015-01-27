@@ -16,7 +16,6 @@ do
         echo "$f: $outp"
         exit $status
     fi
-    cp -f -R obj/* $d/obj/
 done
 
 cd $d

@@ -15,5 +15,9 @@ if [ $status -ne 0 ]
 then
     exit $status
 fi
-
-ld -melf_i386 -o obj/start.o obj/start16.o obj/start32.o -Ttext 0xF000 -e 0xF000
+compilegccdbg memory/manager/memory_manager.c
+status=$?
+if [ $status -ne 0 ]
+then
+    exit $status
+fi

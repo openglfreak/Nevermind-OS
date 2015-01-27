@@ -1,6 +1,7 @@
 for f in $(find obj -type f -name *.o)
 do
-    base=$(objdump -f $f | tail -n 2 | head -n 1 | cut -d ' ' -f 2)
+    base=$(objdump -f $f | tail -n 2 | head -n 1)
+    base=${base##* }
     if [ $? = 0 ]
     then
         if [ "$((base))" -ne 0 ]

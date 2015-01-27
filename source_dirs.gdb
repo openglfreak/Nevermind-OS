@@ -1,1 +1,1 @@
-directory :src:src/kernel:src/kernel/drivers:src/kernel/drivers/fs:src/kernel/drivers/fs/ext:src/kernel/memory:src/kernel/memory/memconsts:src/kernel/entry16:src/kernel/loader:src/kernel/loader/obj:src/kernel/loader/bin
+directory :src:src/kernel:src/kernel/drivers:src/kernel/drivers/fs:src/kernel/drivers/fs/ext:src/kernel/drivers/fs/ext/ext2:src/kernel/obj:src/kernel/protected_mode:src/kernel/memory:src/kernel/memory/manager:src/kernel/bin:src/kernel/start:src/loader:src/loader/obj:src/loader/bin:src/loader/ext2:src/memconsts

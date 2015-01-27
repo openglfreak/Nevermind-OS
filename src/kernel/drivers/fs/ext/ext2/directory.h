@@ -1,6 +1,8 @@
 #ifndef DIRECTORY
 #define DIRECTORY
 
+#include <stdint.h>
+
 #define DIRECTORY_TYPE_UNKNOWN 0x00
 #define DIRECTORY_TYPE_FILE 0x01
 #define DIRECTORY_TYPE_DIRECTORY 0x02

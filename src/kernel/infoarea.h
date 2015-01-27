@@ -1,7 +1,14 @@
+#ifndef _INFOAREA
+#define _INFOAREA
+
+#include <stdint.h>
+
 typedef struct __attribute__ ((packed)) {
-    uint32_t COM1base;
-    uint32_t COM2base;
-    uint32_t COM3base;
-    uint32_t COM4base;
+    uint16_t COM1base;
+    uint16_t COM2base;
+    uint16_t COM3base;
+    uint16_t COM4base;
     uint32_t EBDAstart;
 } INFOAREA;
+
+#endif // _INFOAREA
