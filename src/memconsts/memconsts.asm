@@ -19,12 +19,22 @@
 %define infoarea_end 0xB000
 
 %define usable_start 0xB000
-%define usable_end 0xD000
-
-%define pdir_start 0xD000
-%define pdir_end 0xE000
-%define ptable0_start 0xE000
-%define ptable0_end 0xF000
+%define usable_end 0xF000
 
 %define start_file_start 0xF000
 %define start_file_end 0x10000
+
+%define cpuid_signature 0x10000
+%define cpuid_features0 0x10004
+%define cpuid_features1 0x10008
+%define cpuid_features 0x10004
+
+%define pdir_start 0x11000
+%define pdir_end 0x12000
+%define ptable0_start 0x12000
+%define ptable0_end 0x13000
+
+%define physical_memory_usage_map_start 0x13000
+%define physical_memory_usage_map_end 0x15000
+%define physical_memory_usage_page0_start 0x15000
+%define physical_memory_usage_page0_end 0x16000

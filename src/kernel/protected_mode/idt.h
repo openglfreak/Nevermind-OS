@@ -15,13 +15,13 @@
         (((p)?IDT_ATTR_PRESENT:0x00) |\
         IDT_ATTR_MIN_DESCRIPTOR_PRIVILEGE(dpl) |\
         ((s)?IDT_ATTR_STORAGE:0x00) |\
-        ((t)&0x07)
+        ((t)&0x0F))
 
 typedef struct __attribute__((packed)) {
     uint16_t offset_low;
     uint16_t selector;
     uint8_t zero;
-    uint8_t type_and_attributes;
+    uint8_t type_and___attribute__s;
     uint16_t offset_high;
 } IDT_GATE;
 

@@ -1,8 +1,30 @@
-#ifndef VIRTUAL_MEMORY_USAGE_MAP
-#define VIRTUAL_MEMORY_USAGE_MAP
+#ifndef _VIRTUAL_MEMORY_USAGE_MAP
+#define _VIRTUAL_MEMORY_USAGE_MAP
 
 #include <stdint.h>
 
+#ifndef _PAGE_INDEX
+#define _PAGE_INDEX
+
+#define PAGE_TO_POINTER(p) (p<<12)
+#define PAGE_INDEX_TO_PAGE(p) (((p)->map_entry<<9)+(p)->page_entry)
+#define PAGE_INDEX_TO_POINTER(p) PAGE_TO_POINTER(PAGE_INDEX_TO_PAGE(p))
+
+#define POINTER_TO_PAGE(p) (p>>12)
+#define PAGE_TO_PAGE_INDEX(p) {\
+            .map_entry = (p) >> 9,\
+            .page_entry = (p) & 0x1FF\
+        }
+#define POINTER_TO_PAGE_INDEX(p) PAGE_TO_PAGE_INDEX(POINTER_TO_PAGE(p))
+
+typedef struct {
+    uint32_t map_entry;
+    uint32_t page_entry;
+} PAGE_INDEX;
+
+#endif // _PAGE_INDEX
+
+#define VIRTUAL_MEMORY_USAGE_PAGE_PROCESS_ID(i) ((i)<<0x20)
 #define VIRTUAL_MEMORY_USAGE_PAGE_PHYSICAL_ADDRESS(a) (((uint32_t)(a))&0xFFFFF000)
 #define VIRTUAL_MEMORY_USAGE_PAGE_TYPE_USER_ALLOCATED 0x03
 #define VIRTUAL_MEMORY_USAGE_PAGE_TYPE_KERNEL_ALLOCATED 0x02
@@ -29,7 +51,7 @@ typedef struct __attribute__((aligned(0x1000))) {
 } VIRTUAL_MEMORY_USAGE_PAGE;
 
 typedef struct __attribute__((aligned(0x1000))) {
-    VIRTUAL_MEMORY_USAGE_MAP_ENTRY pages[1024];
+    VIRTUAL_MEMORY_USAGE_MAP_ENTRY pages[2048];
 } VIRTUAL_MEMORY_USAGE_MAP;
 
-#endif // VIRTUAL_MEMORY_USAGE_MAP
+#endif // _VIRTUAL_MEMORY_USAGE_MAP

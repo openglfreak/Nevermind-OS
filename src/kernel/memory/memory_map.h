@@ -12,7 +12,7 @@
 typedef struct __attribute__((packed)) {
     uint64_t base;
     uint64_t limit;
-    uint32_t attributes;
+    uint32_t __attribute__s;
     uint32_t infos;
 } MEMORY_MAP_ENTRY;
 

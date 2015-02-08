@@ -1,11 +1,11 @@
-#ifndef GDT
-#define GDT
+#ifndef _GDT
+#define _GDT
 
 #include <stdint.h>
 
 #define GDT_ACC_PRESENT 0x80
 #define GDT_ACC_PRIVILEGE(r) (((r)&0x03)<<0x05)
-#define GDT_ACC_1 0x10
+#define GDT_ACC_ALWAYS_1 0x10
 #define GDT_ACC_EXECUTABLE 0x08
 #define GDT_ACC_DATA 0x00
 #define GDT_ACC_DIRECTION_UP 0x00
@@ -17,7 +17,7 @@
 #define GDT_ACCESS(pr,privl,ex,dc,rw,ac) \
         (((pr)?GDT_ACC_PRESENT:0x00) |\
         GDT_ACC_PRIVILEGE(privl) |\
-        GDT_ACC_1 |\
+        GDT_ACC_ALWAYS_1 |\
         ((ex)?GDT_ACC_EXECUTABLE:GDT_ACC_DATA) |\
         ((dc)?GDT_ACC_DIRECTION_DOWN:GDT_ACC_DIRECTION_UP) |\
         ((rw)?GDT_ACC_READABLE_WRITABLE:0x00) |\
@@ -32,6 +32,8 @@
         (((gr)?GDT_FLAG_GRANULARITY_PAGE:GDT_FLAG_GRANULARITY_BYTE) |\
         ((sz)?GDT_FLAG_32BIT:GDT_FLAG_16BIT) |\
         ((l)?GDT_FLAG_LONGMODE:0x00))
+
+#define GDT_LIMIT_FLAGS(gr,sz,lm,limh) ((GDT_FLAGS(gr,sz,lm) << 4) | (limh & 0x0F))
 
 typedef struct __attribute__((packed)) {
     uint16_t limit_low;
@@ -51,5 +53,5 @@ typedef struct __attribute__((packed)) {
     uint32_t base;
 } GDTR;
 
-#endif // GDT
+#endif // _GDT
 
