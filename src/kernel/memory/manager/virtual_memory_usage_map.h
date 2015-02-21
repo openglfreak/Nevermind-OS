@@ -2,27 +2,7 @@
 #define _VIRTUAL_MEMORY_USAGE_MAP
 
 #include <stdint.h>
-
-#ifndef _PAGE_INDEX
-#define _PAGE_INDEX
-
-#define PAGE_TO_POINTER(p) (p<<12)
-#define PAGE_INDEX_TO_PAGE(p) (((p)->map_entry<<9)+(p)->page_entry)
-#define PAGE_INDEX_TO_POINTER(p) PAGE_TO_POINTER(PAGE_INDEX_TO_PAGE(p))
-
-#define POINTER_TO_PAGE(p) (p>>12)
-#define PAGE_TO_PAGE_INDEX(p) {\
-            .map_entry = (p) >> 9,\
-            .page_entry = (p) & 0x1FF\
-        }
-#define POINTER_TO_PAGE_INDEX(p) PAGE_TO_PAGE_INDEX(POINTER_TO_PAGE(p))
-
-typedef struct {
-    uint32_t map_entry;
-    uint32_t page_entry;
-} PAGE_INDEX;
-
-#endif // _PAGE_INDEX
+#include "page_index.h"
 
 #define VIRTUAL_MEMORY_USAGE_PAGE_PROCESS_ID(i) ((i)<<0x20)
 #define VIRTUAL_MEMORY_USAGE_PAGE_PHYSICAL_ADDRESS(a) (((uint32_t)(a))&0xFFFFF000)

@@ -7,11 +7,11 @@ target remote localhost:1234
 
 python gdb.events.exited.connect(lambda x : gdb.execute("quit"))
 
-source commands.gdb
+source debug/commands.gdb
 
-set debug-file-directory $HOME/os/obj
-source source_dirs.gdb
-source symbol_files.gdb
+set debug-file-directory obj
+source debug/source_dirs.gdb
+source debug/symbol_files.gdb
 
 set disassembly-flavor intel
 set print asm-demangle

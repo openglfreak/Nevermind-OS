@@ -20,4 +20,5 @@ done
 
 cd $d
 
-echo "directory $(find src -type d -exec echo -n :{} ';')" > source_dirs.gdb
+mkdir -p debug
+echo "directory $(find src -type d -exec echo -n :{} ';')" > debug/source_dirs.gdb

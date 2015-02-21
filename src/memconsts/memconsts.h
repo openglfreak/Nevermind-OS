@@ -7,8 +7,7 @@
 #include "../kernel/protected_mode/idt.h"
 #include "../kernel/infoarea.h"
 #include "../kernel/protected_mode/paging.h"
-#include "../kernel/memory/manager/physical_memory_usage_map.h"
-#include "../kernel/memory/manager/virtual_memory_usage_map.h"
+#include "../kernel/memory/manager/physical_memory_map.h"
 
 #define stack_start 0x7B00
 #define stack_end 0x7BF0
@@ -18,9 +17,9 @@
 #define bootsectors ((uint8_t*)0x7BFE)
 #define bootdrive ((uint8_t*)0x7BFF)
 
-#define memmap_start ((MEMORY_MAP_ENTRY*)0x7E00)
-#define memmap_end ((MEMORY_MAP_ENTRY*)0x8000)
-#define memmap ((MEMORY_MAP*)memmap_start)
+#define hmemmap_start ((HARDWARE_MEMORY_MAP_ENTRY*)0x7E00)
+#define hmemmap_end ((HARDWARE_MEMORY_MAP_ENTRY*)0x8000)
+#define hmemmap ((HARDWARE_MEMORY_MAP*)hmemmap_start)
 
 #define gdt_start ((GDT_ENTRY*)0x8000)
 #define gdt_end ((GDT_ENTRY*)0xA000)
@@ -53,12 +52,12 @@
 #define ptable0_end ((PAGE_TABLE_ENTRY*)0x22000)
 #define ptable0 ((PAGE_TABLE*)ptable0_start)
 
-#define physical_memory_usage_map_start ((PHYSICAL_MEMORY_USAGE_MAP_ENTRY*)0x22000)
-#define physical_memory_usage_map_end ((PHYSICAL_MEMORY_USAGE_MAP_ENTRY*)0x24000)
-#define physical_memory_usage_map ((PHYSICAL_MEMORY_USAGE_MAP*)physical_memory_usage_map_start)
-#define physical_memory_usage_page0_start ((PHYSICAL_MEMORY_USAGE_PAGE_ENTRY*)0x24000)
-#define physical_memory_usage_page0_end ((PHYSICAL_MEMORY_USAGE_PAGE_ENTRY*)0x26000)
-#define physical_memory_usage_page0 ((PHYSICAL_MEMORY_USAGE_PAGE*)physical_memory_usage_page0_start)
+#define physical_memory_map_start ((PHYSICAL_MEMORY_MAP_ENTRY*)0x22000)
+#define physical_memory_map_end ((PHYSICAL_MEMORY_MAP_ENTRY*)0x23000)
+#define physical_memory_map ((PHYSICAL_MEMORY_MAP*)physical_memory_map_start)
+#define physical_memory_map_section0_start ((PHYSICAL_MEMORY_MAP_SECTION_ENTRY*)0x23000)
+#define physical_memory_map_section0_end ((PHYSICAL_MEMORY_MAP_SECTION_ENTRY*)0x24000)
+#define physical_memory_map_section0 ((PHYSICAL_MEMORY_MAP_SECTION*)physical_memory_map_section0_start)
 
 #define video_buffer_start ((uint16_t*)0xB8000)
 #define video_buffer video_buffer_start

@@ -38,7 +38,7 @@ void __attribute__ ((used, noreturn)) start32()
     register_interrupts();
     get_cpuid_feature_info();
     enable_paging();
-    //initialize_memory_manager();
+    initialize_memory_manager();
     setup_usermode_segments();
     jmp_ring(0x18, 0x20, 0x20, 0x1000, (uint32_t)&user, 0x03);
     while (1)

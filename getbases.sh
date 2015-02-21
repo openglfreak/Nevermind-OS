@@ -12,4 +12,5 @@ add-symbol-file \"$f\" $base"
     fi
 done
 
-echo "$bases" > symbol_files.gdb
+mkdir -p debug
+echo "$bases" > debug/symbol_files.gdb

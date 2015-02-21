@@ -170,13 +170,13 @@ push edx
 push si
 push di
 .clear_memmap:
-mov ecx,(memmap_end-memmap_start)
+mov ecx,(hmemmap_end-hmemmap_start)
 .clear_memmap_loop:
 sub ecx,0x04
-mov dword [memmap_start+ecx],0x00
+mov dword [hmemmap_start+ecx],0x00
 jnz .clear_memmap_loop
 .init_loop:
-mov si,memmap_start
+mov si,hmemmap_start
 xor di,di
 mov es,di
 mov di,infoarea_start+0x10
