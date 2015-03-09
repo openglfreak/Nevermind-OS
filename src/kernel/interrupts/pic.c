@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include "pic.h"
 
 #define INB(p,d) __asm__ __volatile__ ("inb %1,%%al\nmovzx %%al,%%eax\n" : "=a" (d) : "di" (p))
 #define OUTB(p,b) __asm__ __volatile__ ("outb %%al,%0\n" : : "i" (p), "a" (b))

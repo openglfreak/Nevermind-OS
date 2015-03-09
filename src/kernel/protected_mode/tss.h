@@ -1,8 +1,6 @@
 #ifndef _TSS
 #define _TSS
 
-#include <stdint.h>
-
 #define GDT_TSS_ENTRY(addr,privl) ((GDT_ENTRY){\
             .limit_low = 0x68,\
             .base_low = ((uint32_t)(addr)) & 0xFFFF,\

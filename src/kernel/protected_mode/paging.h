@@ -1,8 +1,6 @@
 #ifndef PAGING
 #define PAGING
 
-#include <stdint.h>
-
 #define PAGE_DIRECTORY_ADDRESS(a) (((uint32_t)(a))&0xFFFFF000)
 #define PAGE_DIRECTORY_SIZE_4KB 0x00
 #define PAGE_DIRECTORY_SIZE_4MB 0x80

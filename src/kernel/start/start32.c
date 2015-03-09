@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include "../protected_mode/gdt.h"
 #include "../protected_mode/tss.h"
 #include "../../memconsts/memconsts.h"
 

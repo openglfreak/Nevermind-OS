@@ -1,8 +1,6 @@
 #ifndef _INFOAREA
 #define _INFOAREA
 
-#include <stdint.h>
-
 typedef struct __attribute__ ((packed)) {
     uint16_t COM1base;
     uint16_t COM2base;

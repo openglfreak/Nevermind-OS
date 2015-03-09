@@ -1,8 +1,6 @@
 #ifndef _PHYSICAL_MEMORY_MAP
 #define _PHYSICAL_MEMORY_MAP
 
-#include <stdint.h>
-#include "page_index.h"
 #include "page_type.h"
 
 #define PHYSICAL_MEMORY_MAP_SECTION_ENTRY_PAGE_TYPE(t) ((t)&0x0F)

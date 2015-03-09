@@ -1,8 +1,6 @@
 #ifndef MEMCONSTS
 #define MEMCONSTS
 
-#include <stdint.h>
-#include "../kernel/memory/memory_map.h"
 #include "../kernel/protected_mode/gdt.h"
 #include "../kernel/protected_mode/idt.h"
 #include "../kernel/infoarea.h"

@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include "virtual_memory_usage_map.h"
 #include "../../../memconsts/memconsts.h"
 
 uint32_t get_free_virtual_page()

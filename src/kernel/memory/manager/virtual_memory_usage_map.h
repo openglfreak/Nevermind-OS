@@ -1,8 +1,6 @@
 #ifndef _VIRTUAL_MEMORY_USAGE_MAP
 #define _VIRTUAL_MEMORY_USAGE_MAP
 
-#include <stdint.h>
-#include "page_index.h"
 
 #define VIRTUAL_MEMORY_USAGE_PAGE_PROCESS_ID(i) ((i)<<0x20)
 #define VIRTUAL_MEMORY_USAGE_PAGE_PHYSICAL_ADDRESS(a) (((uint32_t)(a))&0xFFFFF000)

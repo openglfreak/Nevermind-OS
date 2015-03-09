@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include "physical_memory_map.h"
 #include "../../../memconsts/memconsts.h"
 
 #define MAP_ALLOCATED(e) (((e)&PHYSICAL_MEMORY_MAP_ENTRY_DIRECT)?((e)>>14||(e)&0x07):(e)>>12)

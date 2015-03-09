@@ -13,6 +13,7 @@ do
     status=$?
     if [ $status -ne 0 ]
     then
+        cd $d
         echo "$f: $outp"
         exit $status
     fi

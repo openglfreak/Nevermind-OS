@@ -1,5 +1,3 @@
-#include <stdint.h>
-#include "physical_memory_map.h"
 #include "../../../memconsts/memconsts.h"
 
 extern void initialize_physical_memory_manager();

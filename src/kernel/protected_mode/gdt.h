@@ -1,8 +1,6 @@
 #ifndef _GDT
 #define _GDT
 
-#include <stdint.h>
-
 #define GDT_ACC_PRESENT 0x80
 #define GDT_ACC_PRIVILEGE(r) (((r)&0x03)<<0x05)
 #define GDT_ACC_ALWAYS_1 0x10

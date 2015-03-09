@@ -1,8 +1,6 @@
 #ifndef _IDT
 #define _IDT
 
-#include <stdint.h>
-
 #define IDT_ATTR_PRESENT 0x80
 #define IDT_ATTR_MIN_DESCRIPTOR_PRIVILEGE(r) (((r)&0x03)<<0x05)
 #define IDT_ATTR_STORAGE 0x10
